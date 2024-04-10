@@ -67,7 +67,7 @@ func verifyCoordinate(coordinate string) (bool, error) {
 	if err != nil {
 		return false, fmt.Errorf(
 			"Invalid longitude: %s.Value should be convertible to float.",
-			coord[0])
+			coord[1])
 	}
 	if longitude > 180 || longitude < -180 {
 		return false, fmt.Errorf(
