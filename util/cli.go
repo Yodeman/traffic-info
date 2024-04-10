@@ -31,7 +31,7 @@ func CheckArgs() {
 	}
 
 	if valid, err := verifyCoordinate(origin); !valid {
-		log.Fatalln("origin coordinate: %v", err)
+		log.Fatalf("origin coordinate: %v\n", err)
 	}
 
 	if valid, err := verifyCoordinate(destination); !valid {
