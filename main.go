@@ -1,7 +1,7 @@
 package main
 
 import (
-    "fmt"
+    "log"
     "os"
 
     "github.com/yodeman/traffic-info/util"
@@ -9,7 +9,7 @@ import (
 
 func main() {
     apiKey := os.Getenv("GOOGLE_MAP_API_KEY")
-    if !apiKey {
+    if apiKey=="" {
         log.Fatalln("Error retreiving Google map api key.")
     }
 
@@ -22,7 +22,7 @@ func main() {
         log.Fatalf("Fetch Traffic Info: %v", err)
     }
 
-    err = printTrafficInfo(trafficResp)
+    err = util.PrintTrafficInfo(trafficResp)
     if err != nil {
         log.Fatalf("Print Traffic Info: %v", err)
     }
