@@ -1,6 +1,7 @@
 package util
 
 import (
+    "fmt"
     "flag"
     "log"
     "strconv"
@@ -25,7 +26,7 @@ func init() {
 
 // verify the status of the command line arguments.
 func CheckArgs() {
-    if !origin || !destination {
+    if origin=="" || destination=="" {
         log.Fatalln("Command line argument `origin` and `destination` are required.")
     }
 
@@ -40,7 +41,7 @@ func CheckArgs() {
 
 // validates the command line latitude/longitude input
 func verifyCoordinate(coordinate string) (bool, error) {
-    coord := strings.Split(coordinate, ',')
+    coord := strings.Split(coordinate, ",")
     if len(coord) != 2 {
         return false, fmt.Errorf(
                         "Error decoding coordinate: %s\n Expected latitude,longitude",
@@ -51,7 +52,7 @@ func verifyCoordinate(coordinate string) (bool, error) {
     latitude, err := strconv.ParseFloat(coord[0], 32)
     if err != nil {
         return false, fmt.Errorf(
-                        "Invalid latitude: %s.Value should be convertible to float."
+                        "Invalid latitude: %s.Value should be convertible to float.",
                         coord[0])
     }
     if latitude > 90 || latitude < -90 {
@@ -65,7 +66,7 @@ func verifyCoordinate(coordinate string) (bool, error) {
     longitude, err := strconv.ParseFloat(coord[1], 32)
     if err != nil {
         return false, fmt.Errorf(
-                        "Invalid longitude: %s.Value should be convertible to float."
+                        "Invalid longitude: %s.Value should be convertible to float.",
                         coord[0])
     }
     if longitude > 180 || longitude < -180 {
