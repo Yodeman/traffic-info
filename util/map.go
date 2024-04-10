@@ -1,6 +1,7 @@
 package util
 
 import (
+    "fmt"
     "encoding/json"
     "net/http"
     "net/url"
@@ -28,10 +29,10 @@ type DistanceMatrixRow struct {
 
 type DistanceMatrixElement struct {
     Status              string
-    Distance            DistanceTextValueObject `json:"omitempty"`
-    Duration            DistanceTextValueObject `json:"omitempty"`
+    Distance            DistanceTextValueObject `json:"distance,omitempty"`
+    Duration            DistanceTextValueObject `json:"duration,omitempty"`
     TrafficDuration     DistanceTextValueObject `json:"duration_in_traffic,omitempty"`
-    Fare                DistanceFare            `json:"omitempty"`
+    Fare                DistanceFare            `json:"fare,omitempty"`
 }
 
 type DistanceTextValueObject struct {
@@ -51,13 +52,14 @@ const respTempl = `
 Traffic Information:
 --------------------
 
-Origins:        {{.OriginAddr[0]}}
+Origin:        {{index .OriginAddr 0}}
 
-Destination:    {{.DestinationAddr[0]}}
+Destination:    {{index .DestinationAddr 0}}
 
 {{range .Rows}}
-    Distance:   {{.Elements[0].Distance.Text}}
-    Duration:   {{.Elements[0].Duration.Text}}
+    *Distance:   {{(index .Elements 0).Distance.Text}}
+
+    *Duration:   {{(index .Elements 0).Duration.Text}}
 {{end}}
 `
 
@@ -70,9 +72,11 @@ func init() {
 
 // Fetch traffic information using the origin and destination.
 func FetchTrafficInfo(apiKey string) (DistanceMatrixResponse, error) {
-    URL := url.QueryEscape(fmt.Sprintf(
+    escapedOrigin := url.QueryEscape(origin)
+    escapedDestination := url.QueryEscape(destination)
+    URL := fmt.Sprintf(
         "%slanguage=en&key=%s&origins=%s&destinations=%s",
-        baseURL, apiKey, origin, destination))
+        baseURL, apiKey, escapedOrigin, escapedDestination)
 
     // Retry for 10 seconds in case of any error while fetching traffic
     // informatin from Google API.
@@ -86,24 +90,28 @@ func FetchTrafficInfo(apiKey string) (DistanceMatrixResponse, error) {
 
         if response.StatusCode == http.StatusOK {
             var trafficResponse DistanceMatrixResponse
-            err := json.NewDecoder(response.Body).Decode(trafficResponse)
+            err := json.NewDecoder(response.Body).Decode(&trafficResponse)
             if err != nil {
-                return DistanceMatrixResponse{}, fmt.Errorf("Error decoding response.")
+                return DistanceMatrixResponse{}, fmt.Errorf(
+                        "Error decoding response. %v", err)
             }
             return trafficResponse, nil
         }
     }
     return DistanceMatrixResponse{}, fmt.Errorf(
-            "Error getting traffic information after %s",
+            "Error getting traffic information after %s.",
             timeout)
 }
 
-func printTrafficInfo(trafficResponse DistanceMatrixResponse) error {
+// Print a formatted version of the traffic information received
+// from Google map API.
+func PrintTrafficInfo(trafficResponse DistanceMatrixResponse) error {
     writer := new(strings.Builder)
 
     if err := trafficInfo.Execute(writer, trafficResponse); err != nil {
         return fmt.Errorf("Error formatting traffic information response.%v", err)
     }
 
-    fmt.Println(writer.String())
+    _, err := fmt.Println(writer.String())
+    return err
 }
