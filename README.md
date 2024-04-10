@@ -2,7 +2,7 @@
 
 Retrieves traffic information of a given origin and destination `latitude,longitude` coordinates.
 
-## SETUP
+## USAGE
 
 Clone the repository and changed directory to the project root directory, then execute
 the following command to use the program:
