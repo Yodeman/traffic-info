@@ -52,12 +52,12 @@ func verifyCoordinate(coordinate string) (bool, error) {
 	latitude, err := strconv.ParseFloat(coord[0], 32)
 	if err != nil {
 		return false, fmt.Errorf(
-			"Invalid latitude: %s.Value should be convertible to float.",
+			"Invalid latitude: %s. Value should be convertible to float.",
 			coord[0])
 	}
 	if latitude > 90 || latitude < -90 {
 		return false, fmt.Errorf(
-			"Invalid latitude: %f.Value should be between -90 and 90.",
+			"Invalid latitude: %f. Value should be between -90 and 90.",
 			latitude)
 	}
 
@@ -66,13 +66,13 @@ func verifyCoordinate(coordinate string) (bool, error) {
 	longitude, err := strconv.ParseFloat(coord[1], 32)
 	if err != nil {
 		return false, fmt.Errorf(
-			"Invalid longitude: %s.Value should be convertible to float.",
+			"Invalid longitude: %s. Value should be convertible to float.",
 			coord[1])
 	}
 	if longitude > 180 || longitude < -180 {
 		return false, fmt.Errorf(
-			"Invalid longitude: %f.Value should be between -180 and 180.",
-			latitude)
+			"Invalid longitude: %f. Value should be between -180 and 180.",
+			longitude)
 	}
 
 	return true, nil
