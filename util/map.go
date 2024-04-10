@@ -52,14 +52,16 @@ const respTempl = `
 Traffic Information:
 --------------------
 
-Origin:        {{index .OriginAddr 0}}
+Origin:         {{index .OriginAddr 0}}
 
 Destination:    {{index .DestinationAddr 0}}
 
 {{range .Rows}}
-    *Distance:   {{(index .Elements 0).Distance.Text}}
+    *Distance:  {{(index .Elements 0).Distance.Text}}
 
-    *Duration:   {{(index .Elements 0).Duration.Text}}
+    *Duration:  {{(index .Elements 0).Duration.Text}}
+
+    *Status:    {{(index .Elements 0).Status}}
 {{end}}
 `
 
