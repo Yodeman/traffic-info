@@ -107,10 +107,14 @@ func FetchTrafficInfo(apiKey string) (DistanceMatrixResponse, error) {
 
 // Print a formatted version of the traffic information received
 // from Google map API.
-func PrintTrafficInfo(trafficResponse DistanceMatrixResponse) error {
+func (DMatrix *DistanceMatrixResponse) PrintTrafficInfo() error {
 	writer := new(strings.Builder)
 
-	if err := trafficInfo.Execute(writer, trafficResponse); err != nil {
+	if DMatrix.Status != "OK" {
+		return fmt.Errorf(
+			"Status: %s, Error Message: %s", DMatrix.Status, DMatrix.ErrMsg)
+	}
+	if err := trafficInfo.Execute(writer, DMatrix); err != nil {
 		return fmt.Errorf("Error formatting traffic information response.%v", err)
 	}
 
