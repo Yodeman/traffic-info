@@ -22,7 +22,7 @@ func main() {
 		log.Fatalf("Fetch Traffic Info: %v", err)
 	}
 
-	err = util.PrintTrafficInfo(trafficResp)
+	err = trafficResp.PrintTrafficInfo()
 	if err != nil {
 		log.Fatalf("Print Traffic Info: %v", err)
 	}
